@@ -1,0 +1,16 @@
+name: antmediacr
+version: 0.1.0
+
+authors:
+  - Russell Smith <russ@bashme.org>
+
+description: |
+  Simple interface for antmedia
+
+dependencies:
+  crest:
+    github: mamantoha/crest
+
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr

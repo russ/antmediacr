@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ant-media-server
+spec:
+  selector:
+    matchLabels:
+      app: ant-media
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ant-media
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - ant-media
+            topologyKey: "kubernetes.io/hostname"
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: ant-media-server
+        imagePullPolicy: IfNotPresent # change this value accordingly. It can be Never, Always or IfNotPresent
+        image: ant-media-server-enterprise-k8s:test # change this value according to your image.
+        args: ["-g", "true", "-s", "true", "-r", "true"]
+        resources:
+          requests:
+             cpu: 1000m
