@@ -10,6 +10,9 @@ description: |
 dependencies:
   crest:
     github: mamantoha/crest
+  jwt:
+    github: crystal-community/jwt
+    version: ~> 1.6.0
 
 development_dependencies:
   webmock:

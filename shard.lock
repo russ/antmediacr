@@ -1,5 +1,9 @@
 version: 2.0
 shards:
+  bindata:
+    git: https://github.com/spider-gazelle/bindata.git
+    version: 1.10.0
+
   crest:
     git: https://github.com/mamantoha/crest.git
     version: 1.3.1
@@ -11,6 +15,14 @@ shards:
   http_proxy:
     git: https://github.com/mamantoha/http_proxy.git
     version: 0.9.0
+
+  jwt:
+    git: https://github.com/crystal-community/jwt.git
+    version: 1.6.0
+
+  openssl_ext:
+    git: https://github.com/spider-gazelle/openssl_ext.git
+    version: 2.1.5
 
   webmock:
     git: https://github.com/manastech/webmock.cr.git
