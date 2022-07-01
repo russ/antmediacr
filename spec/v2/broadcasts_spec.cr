@@ -48,6 +48,31 @@ describe Antmedia do
     response["success"].should eq(true)
   end
 
+  it "generates a broadcast token" do
+    stream_id = "XXXANTMEDIAXXX"
+    expires_at = Time.utc + 1.year
+    broadcast = Antmedia::V2::Broadcast.from_json(%({"streamId":"#{stream_id}"}))
+
+    WebMock.stub(:post, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/#{stream_id}/token")
+      .with(body: %({"id":"#{broadcast.stream_id}", "expireDate":"#{expires_at.to_unix}", "type":"publish"}))
+      .to_return(body: %({"tokenId":"NEWTOKEN"}))
+
+    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_token(broadcast, expires_at, "publish")
+    response["tokenId"].should eq("NEWTOKEN")
+  end
+
+  it "deletes broadcast tokens" do
+    stream_id = "XXXANTMEDIAXXX"
+    broadcast = Antmedia::V2::Broadcast.from_json(%({"streamId":"#{stream_id}"}))
+
+    WebMock.stub(:delete, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/#{stream_id}/token")
+      .with(body: %({"id":"#{broadcast.stream_id}"}))
+      .to_return(body: %({"success":true}))
+
+    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_delete_tokens(broadcast)
+    response["success"].should eq(true)
+  end
+
   it "stops a broadcast" do
     stream_id = "XXXANTMEDIAXXX"
     broadcast = Antmedia::V2::Broadcast.from_json(%({"streamId":"#{stream_id}"}))

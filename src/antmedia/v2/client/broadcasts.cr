@@ -29,6 +29,20 @@ module Antmedia
           JSON.parse(response)
         end
 
+        def broadcasts_token(broadcast : Broadcast, expires_at : Time, type : String) : JSON::Any
+          response = @resource["/rest/v2/broadcasts/#{broadcast.stream_id}/token"]
+            .post(form: %({"id":"#{broadcast.stream_id}", "expireDate":"#{expires_at.to_unix}", "type":"#{type}"}))
+            .body
+          JSON.parse(response)
+        end
+
+        def broadcasts_delete_tokens(broadcast : Broadcast) : JSON::Any
+          response = @resource["/rest/v2/broadcasts/#{broadcast.stream_id}/token"]
+            .delete(form: %({"id":"#{broadcast.stream_id}"}))
+            .body
+          JSON.parse(response)
+        end
+
         def broadcasts_count
           JSON.parse(@resource["/rest/v2/broadcasts/count"].get.body)
         end
