@@ -9,7 +9,7 @@ describe Antmedia do
     WebMock.stub(:get, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/#{stream_id}")
       .to_return(body: "{\"streamId\":\"#{stream_id}\"}")
 
-    broadcast = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcast(stream_id)
+    broadcast = Antmedia::V2::Client.new.broadcast(stream_id)
     broadcast.stream_id.should eq(stream_id)
   end
 
@@ -21,7 +21,7 @@ describe Antmedia do
       .with(body: broadcast.to_json)
       .to_return(body: broadcast.to_json)
 
-    broadcast = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_create(broadcast)
+    broadcast = Antmedia::V2::Client.new.broadcasts_create(broadcast)
     broadcast.stream_id.should eq(stream_id)
   end
 
@@ -33,7 +33,7 @@ describe Antmedia do
       .with(body: broadcast.to_json)
       .to_return(body: broadcast.to_json)
 
-    broadcast = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_update(broadcast)
+    broadcast = Antmedia::V2::Client.new.broadcasts_update(broadcast)
     broadcast.stream_id.should eq(stream_id)
   end
 
@@ -44,7 +44,7 @@ describe Antmedia do
     WebMock.stub(:delete, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/#{stream_id}")
       .to_return(body: %({"success":true}))
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_delete(broadcast)
+    response = Antmedia::V2::Client.new.broadcasts_delete(broadcast)
     response["success"].should eq(true)
   end
 
@@ -57,7 +57,7 @@ describe Antmedia do
       .with(body: %({"id":"#{broadcast.stream_id}", "expireDate":"#{expires_at.to_unix}", "type":"publish"}))
       .to_return(body: %({"tokenId":"NEWTOKEN"}))
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_token(broadcast, expires_at, "publish")
+    response = Antmedia::V2::Client.new.broadcasts_token(broadcast, expires_at, "publish")
     response["tokenId"].should eq("NEWTOKEN")
   end
 
@@ -69,7 +69,7 @@ describe Antmedia do
       .with(body: %({"id":"#{broadcast.stream_id}"}))
       .to_return(body: %({"success":true}))
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_delete_tokens(broadcast)
+    response = Antmedia::V2::Client.new.broadcasts_delete_tokens(broadcast)
     response["success"].should eq(true)
   end
 
@@ -81,21 +81,21 @@ describe Antmedia do
       .with(body: %({"id":"#{broadcast.stream_id}"}))
       .to_return(body: %({"success":true}))
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_stop(broadcast)
+    response = Antmedia::V2::Client.new.broadcasts_stop(broadcast)
     response["success"].should eq(true)
   end
 
   it "returns the broadcast count" do
     WebMock.stub(:get, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/count").to_return(body: {number: 2}.to_json)
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_count
+    response = Antmedia::V2::Client.new.broadcasts_count
     response["number"].should eq(2)
   end
 
   it "returns the active live stream broadcast count" do
     WebMock.stub(:get, "#{ANTMEDIA_ENDPOINT}/rest/v2/broadcasts/active-live-stream-count").to_return(body: {number: 2}.to_json)
 
-    response = Antmedia::V2::Client.new(ANTMEDIA_ENDPOINT, generate_jwt_token).broadcasts_active_live_stream_count
+    response = Antmedia::V2::Client.new.broadcasts_active_live_stream_count
     response["number"].should eq(2)
   end
 end
