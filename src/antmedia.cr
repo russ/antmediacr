@@ -1,7 +1,7 @@
 require "crest"
 require "json"
 require "uri"
-require "./v2/client/*"
+require "./antmedia/v2/client/*"
 
 module Antmedia
   module V2
